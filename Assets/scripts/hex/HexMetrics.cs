@@ -2,7 +2,7 @@
  * @Author: delevin.ying 
  * @Date: 2020-05-08 17:17:05 
  * @Last Modified by: delevin.ying
- * @Last Modified time: 2020-05-20 17:10:13
+ * @Last Modified time: 2020-05-20 17:45:32
  */
 using UnityEngine;
 namespace Hex
@@ -34,12 +34,23 @@ namespace Hex
 
         public static Vector3 GetFirstCorner(HexDirection direction)
         {
-            return corners[(int)direction] * solidFactor;
+            return corners[(int)direction];
         }
 
         public static Vector3 GetSecondCorner(HexDirection direction)
         {
-            return corners[(int)direction + 1] * solidFactor            ;
+            return corners[(int)direction + 1];
+        }
+
+
+        public static Vector3 GetFirstSolidCorner(HexDirection direction)
+        {
+            return corners[(int)direction] * solidFactor;
+        }
+
+        public static Vector3 GetSecondSolidCorner(HexDirection direction)
+        {
+            return corners[(int)direction + 1] * solidFactor;
         }
     }
 }
