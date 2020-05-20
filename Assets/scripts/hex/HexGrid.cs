@@ -2,7 +2,7 @@
  * @Author: delevin.ying 
  * @Date: 2020-05-08 17:26:35 
  * @Last Modified by: delevin.ying
- * @Last Modified time: 2020-05-09 15:39:10
+ * @Last Modified time: 2020-05-20 16:06:33
  */
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,6 +53,31 @@ public class HexGrid : MonoBehaviour
         cell.transform.parent = this.gameObject.transform;
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
+
+        if (x > 0)
+        {
+            cell.SetNeighbor(HexDirection.W, cells[i - 1]);
+        }
+        if (z > 0)
+        {
+            if ((z & 1) == 0)
+            {
+                cell.SetNeighbor(HexDirection.SE, cells[i - width]);
+                if (x > 0)
+                {
+                    cell.SetNeighbor(HexDirection.SW, cells[i - width - 1]);
+                }
+            }
+            else
+            {
+                cell.SetNeighbor(HexDirection.SW, cells[i - width]);
+                if (x < width - 1)
+                {
+                    cell.SetNeighbor(HexDirection.SE, cells[i - width + 1]);
+                }
+            }
+        }
+
         Text label = Instantiate<Text>(hexCellLabel);
         label.rectTransform.SetParent(gridCanvas.transform, false);
         label.rectTransform.anchoredPosition =
@@ -98,5 +123,23 @@ public class HexGrid : MonoBehaviour
         HexCell cell = cells[index];
         cell.color = color;
         hexMesh.Triangulate(cells);
+    }
+}
+
+public enum HexDirection
+{
+    NE,
+    E,
+    SE,
+    SW,
+    W,
+    NW
+}
+
+public static class HexDirectionExtensions
+{
+    public static HexDirection HexDirectionOpposite(this HexDirection hexDirection)
+    {
+        return (int)hexDirection < 3 ? (hexDirection + 3) : (hexDirection - 3);
     }
 }

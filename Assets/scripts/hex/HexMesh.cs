@@ -2,7 +2,7 @@
  * @Author: delevin.ying 
  * @Date: 2020-05-09 14:44:30 
  * @Last Modified by: delevin.ying
- * @Last Modified time: 2020-05-09 15:38:23
+ * @Last Modified time: 2020-05-20 16:38:07
  */
 using UnityEngine;
 using System.Collections.Generic;
@@ -37,6 +37,7 @@ public class HexMesh : MonoBehaviour
         {
             triangulateCell(cells[i]);
         }
+
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
         mesh.colors = colors.ToArray();
@@ -46,16 +47,23 @@ public class HexMesh : MonoBehaviour
 
     private void triangulateCell(HexCell cell)
     {
-        Vector3 center = cell.transform.localPosition;
-        for (int i = 0; i < 6; i++)
+        for (HexDirection hexDirection = HexDirection.NE; hexDirection <= HexDirection.NW; hexDirection++)
         {
-            addTriangle(
-                center,
-                center + HexMetrics.corners[i],
-                center + HexMetrics.corners[i + 1]
-            );
-            addTriangleColor(cell.color);
+            triangulateCell(hexDirection, cell);
         }
+    }
+
+    private void triangulateCell(HexDirection hexDirection, HexCell cell)
+    {
+        Vector3 center = cell.transform.localPosition;
+        addTriangle(
+            center,
+            center + HexMetrics.GetFirstCorner(hexDirection),
+            center + HexMetrics.GetSecondCorner(hexDirection)
+        );
+        HexCell neighbor = cell.GetNeighbor(hexDirection) ?? cell;
+        Color edgeColor = (cell.color + neighbor.color) * 0.5f;
+        addTriangleColor(cell.color, edgeColor, edgeColor);
     }
 
     private void addTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
@@ -69,10 +77,10 @@ public class HexMesh : MonoBehaviour
         triangles.Add(vertexIndex + 2);
     }
 
-    private void addTriangleColor(Color color)
+    private void addTriangleColor(Color c1, Color c2, Color c3)
     {
-        colors.Add(color);
-        colors.Add(color);
-        colors.Add(color);
+        colors.Add(c1);
+        colors.Add(c2);
+        colors.Add(c3);
     }
 }
