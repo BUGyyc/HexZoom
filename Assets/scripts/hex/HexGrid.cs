@@ -2,7 +2,7 @@
  * @Author: delevin.ying 
  * @Date: 2020-05-08 17:26:35 
  * @Last Modified by: delevin.ying
- * @Last Modified time: 2020-05-20 16:06:33
+ * @Last Modified time: 2020-05-20 16:56:39
  */
 using UnityEngine;
 using UnityEngine.UI;
@@ -141,5 +141,15 @@ public static class HexDirectionExtensions
     public static HexDirection HexDirectionOpposite(this HexDirection hexDirection)
     {
         return (int)hexDirection < 3 ? (hexDirection + 3) : (hexDirection - 3);
+    }
+
+    public static HexDirection Previous(this HexDirection hexDirection)
+    {
+        return (hexDirection == HexDirection.NE) ? HexDirection.NW : hexDirection - 1;
+    }
+
+    public static HexDirection Next(this HexDirection hexDirection)
+    {
+        return (hexDirection == HexDirection.NW) ? HexDirection.NE : hexDirection - 1;
     }
 }

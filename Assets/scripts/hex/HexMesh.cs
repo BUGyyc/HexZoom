@@ -2,7 +2,7 @@
  * @Author: delevin.ying 
  * @Date: 2020-05-09 14:44:30 
  * @Last Modified by: delevin.ying
- * @Last Modified time: 2020-05-20 16:38:07
+ * @Last Modified time: 2020-05-20 17:00:20
  */
 using UnityEngine;
 using System.Collections.Generic;
@@ -61,9 +61,14 @@ public class HexMesh : MonoBehaviour
             center + HexMetrics.GetFirstCorner(hexDirection),
             center + HexMetrics.GetSecondCorner(hexDirection)
         );
+        HexCell preNeighbor = cell.GetNeighbor(hexDirection.Previous()) ?? cell;
         HexCell neighbor = cell.GetNeighbor(hexDirection) ?? cell;
-        Color edgeColor = (cell.color + neighbor.color) * 0.5f;
-        addTriangleColor(cell.color, edgeColor, edgeColor);
+        HexCell nextNeighbor = cell.GetNeighbor(hexDirection.Next()) ?? cell;
+        addTriangleColor(
+            cell.color,
+            (cell.color + preNeighbor.color + neighbor.color) / 3f,
+            (cell.color + neighbor.color + nextNeighbor.color) / 3f
+        );
     }
 
     private void addTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
