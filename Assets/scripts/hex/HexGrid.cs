@@ -2,7 +2,7 @@
  * @Author: delevin.ying 
  * @Date: 2020-05-08 17:26:35 
  * @Last Modified by: delevin.ying
- * @Last Modified time: 2020-05-20 16:56:39
+ * @Last Modified time: 2020-05-20 17:21:08
  */
 using UnityEngine;
 using UnityEngine.UI;
@@ -80,40 +80,9 @@ public class HexGrid : MonoBehaviour
 
         Text label = Instantiate<Text>(hexCellLabel);
         label.rectTransform.SetParent(gridCanvas.transform, false);
-        label.rectTransform.anchoredPosition =
-            new Vector2(position.x, position.z);
+        label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
         label.text = cell.coordinates.ToStringOnSeparateLines();
     }
-
-    private void Update()
-    {
-        // if (Input.GetMouseButton(0))
-        // {
-        //     inputHandler();
-        // }
-    }
-
-    private void inputHandler()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-        {
-            touchCell(hit.point);
-        }
-    }
-
-    private void touchCell(Vector3 position)
-    {
-        position = transform.InverseTransformPoint(position);
-        HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-        Debug.Log("touched at " + coordinates.ToString());
-        int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
-        HexCell cell = cells[index];
-        cell.color = touchedColor;
-        hexMesh.Triangulate(cells);
-    }
-
     public void ColorCell(Vector3 position, Color color)
     {
         position = transform.InverseTransformPoint(position);
@@ -150,6 +119,6 @@ public static class HexDirectionExtensions
 
     public static HexDirection Next(this HexDirection hexDirection)
     {
-        return (hexDirection == HexDirection.NW) ? HexDirection.NE : hexDirection - 1;
+        return (hexDirection == HexDirection.NW) ? HexDirection.NE : hexDirection + 1;
     }
 }
