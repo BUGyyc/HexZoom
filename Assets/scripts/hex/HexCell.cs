@@ -16,6 +16,8 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     HexCell[] neighbors;
 
+    public int elevation;
+
     public HexCell GetNeighbor(HexDirection direction)
     {
         Debug.LogWarning("direction:  " + (int)direction + "   " + direction);
