@@ -6,16 +6,21 @@
  */
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 public class HexMapEditor : MonoBehaviour
 {
     public Color[] colors;
     public HexGrid hexGrid;
     private Color activeColor;
+    private int activeElevation;
 
     public void SelectColor(int index)
     {
         activeColor = colors[index];
+    }
+
+    public void SelectElevation(float elevation)
+    {
+        activeElevation = (int)elevation;
     }
 
     private void Awake()
@@ -44,6 +49,7 @@ public class HexMapEditor : MonoBehaviour
     private void EditHexCell(HexCell cell)
     {
         cell.color = activeColor;
+        cell.Elevation = activeElevation;
         hexGrid.Refresh();
     }
 }

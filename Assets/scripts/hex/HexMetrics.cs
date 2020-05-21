@@ -22,7 +22,7 @@ namespace Hex
         public const float solidFactor = 0.75f;
         public const float blendFactor = 1f - solidFactor;
 
-        public const float elevationStep = 10f;
+        public const float elevationStep = 6f;
 
         public static Vector3[] corners =
         {
