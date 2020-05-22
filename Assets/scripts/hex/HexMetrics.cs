@@ -9,37 +9,34 @@ namespace Hex
 {
     public static class HexMetrics
     {
-        /// <summary>
-        /// 外圈半径
-        /// </summary>
         public const float outerRadius = 10f;
-        /// <summary>
-        /// 内圈半径
-        /// </summary>
+
         public const float innerRadius = outerRadius * 0.866025404f;
-        public const float innerDiameter = innerRadius * 2f;
 
         public const float solidFactor = 0.75f;
+
         public const float blendFactor = 1f - solidFactor;
 
-        public const float elevationStep = 6f;
+        public const float elevationStep = 5f;
 
-        public const float terracesPerSlope = 2f;
+        public const int terracesPerSlope = 2;
 
-        public const float terraceSteps = terracesPerSlope * 2 + 1;
+        public const int terraceSteps = terracesPerSlope * 2 + 1;
 
-        public const float horizontalTerraceStepSize = 1f / (terraceSteps + 1);
+        public const float horizontalTerraceStepSize = 1f / terraceSteps;
 
-        public static Vector3[] corners =
+        public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
+
+        static Vector3[] corners =
         {
-            new Vector3(0f, 0f, outerRadius),
-            new Vector3(innerRadius, 0f, 0.5f * outerRadius),
-            new Vector3(innerRadius, 0f, -0.5f * outerRadius),
-            new Vector3(0f, 0f, -outerRadius),
-            new Vector3(-innerRadius, 0f, -0.5f * outerRadius),
-            new Vector3(-innerRadius, 0f, 0.5f * outerRadius),
-            new Vector3(0f, 0f, outerRadius),
-        };
+        new Vector3(0f,0f,outerRadius),
+        new Vector3(innerRadius, 0f, 0.5f * outerRadius),
+        new Vector3(innerRadius, 0f, -0.5f * outerRadius),
+        new Vector3(0f, 0f, -outerRadius),
+        new Vector3(-innerRadius, 0f, -0.5f * outerRadius),
+        new Vector3(-innerRadius, 0f, 0.5f * outerRadius),
+        new Vector3(0f,0f,outerRadius)
+    };
 
         public static Vector3 GetFirstCorner(HexDirection direction)
         {
@@ -51,12 +48,10 @@ namespace Hex
             return corners[(int)direction + 1];
         }
 
-
         public static Vector3 GetFirstSolidCorner(HexDirection direction)
         {
             return corners[(int)direction] * solidFactor;
         }
-
         public static Vector3 GetSecondSolidCorner(HexDirection direction)
         {
             return corners[(int)direction + 1] * solidFactor;
@@ -69,34 +64,35 @@ namespace Hex
 
         public static Vector3 TerraceLerp(Vector3 a, Vector3 b, int step)
         {
-            float h = step * HexMetrics.horizontalTerraceStepSize;
+            float h = step * horizontalTerraceStepSize;
             a.x += (b.x - a.x) * h;
             a.z += (b.z - a.z) * h;
-            float v = ((step + 1) / 2) * HexMetrics.horizontalTerraceStepSize;
+
+            float v = ((step + 1) / 2) * verticalTerraceStepSize;
             a.y += (b.y - a.y) * v;
+
             return a;
         }
-
         public static Color TerraceLerp(Color a, Color b, int step)
         {
-            float h = step * HexMetrics.horizontalTerraceStepSize;
+            float h = step * horizontalTerraceStepSize;
             return Color.Lerp(a, b, h);
         }
 
-        public static HexEdgeType GetEdgeType(int e1, int e2)
+        public static HexEdgeType GetEdgeType(int elevation1, int elevation2)
         {
-            int delta = e1 - e2;
-            if (delta == 0)
+            if (elevation1 == elevation2)
             {
                 return HexEdgeType.Flat;
             }
-            else if (delta == -1 || delta == 1)
+            int delta = elevation2 - elevation1;
+            if (Mathf.Abs(delta) > 1)
             {
-                return HexEdgeType.Slope;
+                return HexEdgeType.Cliff;
             }
             else
             {
-                return HexEdgeType.Cliff;
+                return HexEdgeType.Slope;
             }
         }
     }
