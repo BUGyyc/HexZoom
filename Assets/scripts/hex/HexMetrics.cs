@@ -24,6 +24,12 @@ namespace Hex
 
         public const float elevationStep = 6f;
 
+        public const float terracesPerSlope = 2f;
+
+        public const float terraceSteps = terracesPerSlope * 2 + 1;
+
+        public const float horizontalTerraceStepSize = 1f / (terraceSteps + 1);
+
         public static Vector3[] corners =
         {
             new Vector3(0f, 0f, outerRadius),
@@ -59,6 +65,22 @@ namespace Hex
         public static Vector3 GetBridge(HexDirection direction)
         {
             return (corners[(int)direction] + corners[(int)direction + 1]) * blendFactor;
+        }
+
+        public static Vector3 TerraceLerp(Vector3 a, Vector3 b, int step)
+        {
+            float h = step * HexMetrics.horizontalTerraceStepSize;
+            a.x += (b.x - a.x) * h;
+            a.z += (b.z - a.z) * h;
+            float v = ((step + 1) / 2) * HexMetrics.horizontalTerraceStepSize;
+            a.y += (b.y - a.y) * v;
+            return a;
+        }
+
+        public static Color TerraceLerp(Color a, Color b, int step)
+        {
+            float h = step * HexMetrics.horizontalTerraceStepSize;
+            return Color.Lerp(a, b, h);
         }
     }
 }
