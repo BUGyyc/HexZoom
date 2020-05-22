@@ -82,5 +82,30 @@ namespace Hex
             float h = step * HexMetrics.horizontalTerraceStepSize;
             return Color.Lerp(a, b, h);
         }
+
+        public static HexEdgeType GetEdgeType(int e1, int e2)
+        {
+            int delta = e1 - e2;
+            if (delta == 0)
+            {
+                return HexEdgeType.Flat;
+            }
+            else if (delta == -1 || delta == 1)
+            {
+                return HexEdgeType.Slope;
+            }
+            else
+            {
+                return HexEdgeType.Cliff;
+            }
+        }
+    }
+
+
+    public enum HexEdgeType
+    {
+        Flat,
+        Slope,
+        Cliff
     }
 }
