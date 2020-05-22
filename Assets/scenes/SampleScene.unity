@@ -1212,10 +1212,9 @@ MonoBehaviour:
   height: 6
   cellPrefab: {fileID: 8388060566381438964, guid: ca583d7d451656743bbcb364ad948676,
     type: 3}
-  hexCellLabel: {fileID: 465677801008351681, guid: 02e37922ce5dc134484326a169f8ce44,
+  cellLabelPrefab: {fileID: 465677801008351681, guid: 02e37922ce5dc134484326a169f8ce44,
     type: 3}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  touchedColor: {r: 0, g: 0, b: 0, a: 1}
+  noiseSource: {fileID: 2800000, guid: 32e562939b75c2940a2e094f8408667c, type: 3}
 --- !u!224 &1989258192 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7846435699963620063, guid: f2ce45f2049bb2f4cbbf2022ce129a36,

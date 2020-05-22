@@ -2,7 +2,7 @@
  * @Author: delevin.ying 
  * @Date: 2020-05-08 17:26:03 
  * @Last Modified by: delevin.ying
- * @Last Modified time: 2020-05-20 17:17:59
+ * @Last Modified time: 2020-05-22 19:47:07
  */
 
 using UnityEngine;
@@ -15,10 +15,10 @@ public class HexCell : MonoBehaviour
 
     public RectTransform uiRect;
 
+    private int elevation;
+
     [SerializeField]
     HexCell[] neighbors;
-
-    int elevation;
 
     public int Elevation
     {
@@ -31,34 +31,42 @@ public class HexCell : MonoBehaviour
             elevation = value;
             Vector3 position = transform.localPosition;
             position.y = value * HexMetrics.elevationStep;
+            position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.evevationPerturbStrength;
             transform.localPosition = position;
 
             Vector3 uiPosition = uiRect.localPosition;
-            uiPosition.z = elevation * (-HexMetrics.elevationStep);
+            uiPosition.z = -position.y;
             uiRect.localPosition = uiPosition;
         }
     }
 
+    public Vector3 Position
+    {
+        get
+        {
+            return transform.localPosition;
+        }
+    }
+
+
+
     public HexCell GetNeighbor(HexDirection direction)
     {
-        Debug.LogWarning("direction:  " + (int)direction + "   " + direction);
         return neighbors[(int)direction];
     }
 
     public void SetNeighbor(HexDirection direction, HexCell cell)
     {
         neighbors[(int)direction] = cell;
-        //反向
-        cell.neighbors[(int)direction.HexDirectionOpposite()] = this;
+        cell.neighbors[(int)direction.Opposite()] = this;
     }
 
     public HexEdgeType GetEdgeType(HexDirection direction)
     {
-        return HexMetrics.GetEdgeType(elevation, GetNeighbor(direction).elevation);
+        return HexMetrics.GetEdgeType(elevation, neighbors[(int)direction].elevation);
     }
-
-    public HexEdgeType GetEdgeType(HexCell other)
+    public HexEdgeType GetEdgeType(HexCell otherCell)
     {
-        return HexMetrics.GetEdgeType(elevation, other.Elevation);
+        return HexMetrics.GetEdgeType(elevation, otherCell.elevation);
     }
 }

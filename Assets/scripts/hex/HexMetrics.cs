@@ -2,7 +2,7 @@
  * @Author: delevin.ying 
  * @Date: 2020-05-08 17:17:05 
  * @Last Modified by: delevin.ying
- * @Last Modified time: 2020-05-20 17:45:32
+ * @Last Modified time: 2020-05-22 19:49:23
  */
 using UnityEngine;
 namespace Hex
@@ -13,11 +13,11 @@ namespace Hex
 
         public const float innerRadius = outerRadius * 0.866025404f;
 
-        public const float solidFactor = 0.75f;
+        public const float solidFactor = 0.8f;
 
         public const float blendFactor = 1f - solidFactor;
 
-        public const float elevationStep = 5f;
+        public const float elevationStep = 3f;
 
         public const int terracesPerSlope = 2;
 
@@ -26,6 +26,14 @@ namespace Hex
         public const float horizontalTerraceStepSize = 1f / terraceSteps;
 
         public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
+
+        public const float cellPerturbStrength = 4f;
+
+        public const float noiseScale = 0.003f;
+
+        public const float evevationPerturbStrength = 1.5f;
+
+        public static Texture2D noiseSource;
 
         static Vector3[] corners =
         {
@@ -95,13 +103,10 @@ namespace Hex
                 return HexEdgeType.Slope;
             }
         }
-    }
 
-
-    public enum HexEdgeType
-    {
-        Flat,
-        Slope,
-        Cliff
+        public static Vector4 SampleNoise(Vector3 position)
+        {
+            return noiseSource.GetPixelBilinear(position.x * noiseScale, position.z * noiseScale);
+        }
     }
 }

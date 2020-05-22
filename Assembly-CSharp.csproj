@@ -48,6 +48,7 @@
      <Compile Include="Assets\scripts\hex\HexCell.cs" />
      <Compile Include="Assets\scripts\hex\HexCoordinates.cs" />
      <Compile Include="Assets\scripts\hex\HexCoordinatesDrawer.cs" />
+     <Compile Include="Assets\scripts\hex\HexDirection.cs" />
      <Compile Include="Assets\scripts\hex\HexGrid.cs" />
      <Compile Include="Assets\scripts\hex\HexMapEditor.cs" />
      <Compile Include="Assets\scripts\hex\HexMesh.cs" />
